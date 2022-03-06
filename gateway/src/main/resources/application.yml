@@ -1,0 +1,80 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+  
+      routes:
+      
+        - id: AUTHENTICATION-SERVICE
+          uri: lb://AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/login/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: AUTHENTICATION-SERVICE
+                
+                
+        - id: clients
+          uri: lb://clients
+          predicates:
+            - Path=/clients/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: clients
+                
+        
+                
+        - id: users
+          uri: lb://users
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: users
+                
+        - id: contract
+          uri: lb://contract
+          predicates:
+            - Path=/contract/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: contract
+              
+       
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+
+
+    
+  
+    
+                
+      
+                
+       
+                
+       
+       
+

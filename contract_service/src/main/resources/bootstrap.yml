@@ -1,0 +1,7 @@
+server:
+  port: 9044
+
+spring:
+  application:
+    name: contract
+  
